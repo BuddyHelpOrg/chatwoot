@@ -36,12 +36,12 @@ run:
 	@if [ -f ./.overmind.sock ]; then \
 		echo "Overmind is already running. Use 'make force_run' to start a new instance."; \
 	else \
-		overmind start -f Procfile.dev; \
+		overmind start -f Procfile; \
 	fi
 
 force_run:
 	rm -f ./.overmind.sock
-	overmind start -f Procfile.dev
+	overmind start -f Procfile
 
 debug:
 	overmind connect backend
@@ -49,7 +49,7 @@ debug:
 debug_worker:
 	overmind connect worker
 
-docker: 
+docker:
 	docker build -t $(APP_NAME) -f ./docker/Dockerfile .
 
 .PHONY: setup db_create db_migrate db_seed db_reset db console server burn docker run force_run debug debug_worker
