@@ -1,0 +1,10 @@
+
+
+[phases.setup]
+nixPkgs = ['ruby']
+
+[phases.build]
+cmd = ['gem install bundler', 'bundle install', 'pnpm install', 'SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled bundle exec rake assets:precompile']
+
+[start]
+cmd = 'overmind start -f Procfile'
