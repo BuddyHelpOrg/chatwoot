@@ -190,7 +190,6 @@ export default {
       <UserProfilePicture
         :src="avatarUrl"
         :name="name"
-        size="72px"
         @change="updateProfilePicture"
         @delete="deleteProfilePicture"
       />
@@ -199,7 +198,7 @@ export default {
         :display-name="displayName"
         :email="email"
         :email-enabled="!globalConfig.disableUserProfileUpdate"
-        @updateUser="updateProfile"
+        @update-user="updateProfile"
       />
     </div>
 
@@ -209,7 +208,7 @@ export default {
     >
       <MessageSignature
         :message-signature="messageSignature"
-        @updateSignature="updateSignature"
+        @update-signature="updateSignature"
       />
     </FormSection>
     <FormSection
@@ -266,7 +265,7 @@ export default {
         )
       "
     >
-      <AccessToken :value="currentUser.access_token" @onCopy="onCopyToken" />
+      <AccessToken :value="currentUser.access_token" @on-copy="onCopyToken" />
     </FormSection>
   </div>
 </template>

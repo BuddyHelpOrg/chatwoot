@@ -1,6 +1,6 @@
 import { frontendURL } from '../../../../helper/URLHelper';
-const SettingsContent = () => import('../Wrapper.vue');
-const Index = () => import('./Index.vue');
+import SettingsWrapper from '../SettingsWrapper.vue';
+import Index from './Index.vue';
 
 export default {
   routes: [
@@ -9,7 +9,7 @@ export default {
       meta: {
         permissions: ['administrator'],
       },
-      component: SettingsContent,
+      component: SettingsWrapper,
       props: {
         headerTitle: 'BILLING_SETTINGS.TITLE',
         icon: 'credit-card-person',

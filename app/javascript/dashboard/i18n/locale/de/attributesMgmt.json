@@ -65,7 +65,7 @@
         "ERROR_MESSAGE": "Das benutzerdefinierte Attribut konnte nicht gelöscht werden. Versuchen Sie es noch einmal."
       },
       "CONFIRM": {
-        "TITLE": "Sind Sie sicher, dass Sie %{attributeName} löschen möchten",
+        "TITLE": "Sind Sie sicher, dass Sie {attributeName} löschen möchten",
         "PLACE_HOLDER": "Bitte geben Sie {attributeName} zur Bestätigung ein",
         "MESSAGE": "Beim Löschen wird das benutzerdefinierte Attribut entfernt",
         "YES": "Löschen ",
@@ -92,12 +92,12 @@
       "CONTACT": "Kontakt"
     },
     "LIST": {
-      "TABLE_HEADER": [
-        "Name",
-        "Beschreibung",
-        "Typ",
-        "Schlüssel"
-      ],
+      "TABLE_HEADER": {
+        "NAME": "Name",
+        "DESCRIPTION": "Beschreibung",
+        "TYPE": "Typ",
+        "KEY": "Schlüssel"
+      },
       "BUTTONS": {
         "EDIT": "Bearbeiten",
         "DELETE": "Löschen"

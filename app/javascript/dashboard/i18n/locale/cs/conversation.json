@@ -38,10 +38,17 @@
     "REMOVE_SELECTION": "Odstranit výběr",
     "DOWNLOAD": "Stáhnout",
     "UNKNOWN_FILE_TYPE": "Neznámý soubor",
-    "SAVE_CONTACT": "Save",
+    "SAVE_CONTACT": "Save Contact",
+    "NO_CONTENT": "No content to display",
+    "SHARED_ATTACHMENT": {
+      "CONTACT": "{sender} has shared a contact",
+      "LOCATION": "{sender} has shared a location",
+      "FILE": "{sender} has shared a file",
+      "MEETING": "{sender} has started a meeting"
+    },
     "UPLOADING_ATTACHMENTS": "Nahrávání příloh...",
     "REPLIED_TO_STORY": "Replied to your story",
-    "UNSUPPORTED_MESSAGE": "This message is unsupported.",
+    "UNSUPPORTED_MESSAGE": "This message is unsupported. You can view this message on the Facebook / Instagram app.",
     "UNSUPPORTED_MESSAGE_FACEBOOK": "This message is unsupported. You can view this message on the Facebook Messenger app.",
     "UNSUPPORTED_MESSAGE_INSTAGRAM": "This message is unsupported. You can view this message on the Instagram app.",
     "SUCCESS_DELETE_MESSAGE": "Zpráva byla úspěšně smazána",
@@ -101,7 +108,7 @@
         "SELECT_PLACEHOLDER": "Nic",
         "INPUT_PLACEHOLDER": "Select priority",
         "NO_RESULTS": "Žádné výsledky",
-        "SUCCESSFUL": "Changed priority of conversation id %{conversationId} to %{priority}",
+        "SUCCESSFUL": "Changed priority of conversation id {conversationId} to {priority}",
         "FAILED": "Couldn't change priority. Please try again."
       }
     },
@@ -122,15 +129,15 @@
       "ASSIGN_TEAM": "Přiřadit tým",
       "API": {
         "AGENT_ASSIGNMENT": {
-          "SUCCESFUL": "Konverzace id %{conversationId} přiřazena \"%{agentName}\"",
+          "SUCCESFUL": "Konverzace id {conversationId} přiřazena \"{agentName}\"",
           "FAILED": "Nelze přiřadit agenta. Zkuste to prosím znovu."
         },
         "LABEL_ASSIGNMENT": {
-          "SUCCESFUL": "Přiřazený štítek #%{labelName} ke konverzaci id %{conversationId}",
+          "SUCCESFUL": "Přiřazený štítek #{labelName} ke konverzaci id {conversationId}",
           "FAILED": "Nelze přiřadit štítek. Zkuste to prosím znovu."
         },
         "TEAM_ASSIGNMENT": {
-          "SUCCESFUL": "Přiřazený tým #%{team} ke konverzaci id %{conversationId}",
+          "SUCCESFUL": "Přiřazený tým #{team} ke konverzaci id {conversationId}",
           "FAILED": "Nelze přiřadit tým. Zkuste to prosím znovu."
         }
       }
@@ -219,6 +226,10 @@
         "DELETE": "Vymazat",
         "CANCEL": "Zrušit"
       }
+    },
+    "SIDEBAR": {
+      "CONTACT": "Contact",
+      "COPILOT": "Copilot"
     }
   },
   "EMAIL_TRANSCRIPT": {
@@ -239,11 +250,11 @@
     }
   },
   "ONBOARDING": {
-    "TITLE": "Ahoj, 👋, Vítejte na %{installationName}!",
-    "DESCRIPTION": "Děkujeme za registraci. Chceme, abyste získali maximum z %{installationName}. Zde je několik věcí, které můžete v %{installationName} udělat, abyste udělali zážitek příjemný.",
-    "GREETING_MORNING": "👋 Good morning, %{name}. Welcome to %{installationName}.",
-    "GREETING_AFTERNOON": "👋 Good afternoon, %{name}. Welcome to %{installationName}.",
-    "GREETING_EVENING": "👋 Good evening, %{name}. Welcome to %{installationName}.",
+    "TITLE": "Ahoj, 👋, Vítejte na {installationName}!",
+    "DESCRIPTION": "Děkujeme za registraci. Chceme, abyste získali maximum z {installationName}. Zde je několik věcí, které můžete v {installationName} udělat, abyste udělali zážitek příjemný.",
+    "GREETING_MORNING": "👋 Good morning, {name}. Welcome to {installationName}.",
+    "GREETING_AFTERNOON": "👋 Good afternoon, {name}. Welcome to {installationName}.",
+    "GREETING_EVENING": "👋 Good evening, {name}. Welcome to {installationName}.",
     "READ_LATEST_UPDATES": "Přečtěte si nejnovější aktualizace",
     "ALL_CONVERSATION": {
       "TITLE": "Všechny vaše konverzace na jednom místě",
@@ -310,17 +321,18 @@
     "TO": "Komu",
     "BCC": "Bcc",
     "CC": "Cc",
-    "SUBJECT": "Předmět"
+    "SUBJECT": "Předmět",
+    "EXPAND": "Expand email"
   },
   "CONVERSATION_PARTICIPANTS": {
     "SIDEBAR_MENU_TITLE": "Participating",
     "SIDEBAR_TITLE": "Conversation participants",
     "NO_RECORDS_FOUND": "Žádné výsledky",
     "ADD_PARTICIPANTS": "Select participants",
-    "REMANING_PARTICIPANTS_TEXT": "+%{count} others",
-    "REMANING_PARTICIPANT_TEXT": "+%{count} other",
-    "TOTAL_PARTICIPANTS_TEXT": "%{count} people are participating.",
-    "TOTAL_PARTICIPANT_TEXT": "%{count} person is participating.",
+    "REMANING_PARTICIPANTS_TEXT": "+{count} others",
+    "REMANING_PARTICIPANT_TEXT": "+{count} other",
+    "TOTAL_PARTICIPANTS_TEXT": "{count} people are participating.",
+    "TOTAL_PARTICIPANT_TEXT": "{count} person is participating.",
     "NO_PARTICIPANTS_TEXT": "No one is participating!.",
     "WATCH_CONVERSATION": "Join conversation",
     "YOU_ARE_WATCHING": "You are participating",
@@ -335,5 +347,10 @@
     "ORIGINAL_CONTENT": "Original Content",
     "TRANSLATED_CONTENT": "Translated Content",
     "NO_TRANSLATIONS_AVAILABLE": "No translations are available for this content"
+  },
+  "TYPING": {
+    "ONE": "{user} is typing",
+    "TWO": "{user} and {secondUser} are typing",
+    "MULTIPLE": "{user} and {count} others are typing"
   }
 }

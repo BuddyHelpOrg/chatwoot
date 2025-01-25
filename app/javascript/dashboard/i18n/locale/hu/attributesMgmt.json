@@ -65,7 +65,7 @@
         "ERROR_MESSAGE": "Egyéni Tulajdonság törlése sikertelen. Próbáld újra."
       },
       "CONFIRM": {
-        "TITLE": "Biztosan törölni akarod: %{attributeName}",
+        "TITLE": "Biztosan törölni akarod: {attributeName}",
         "PLACE_HOLDER": "Kérlek gépeld a megerősítéshez",
         "MESSAGE": "A törlés eltávolítja az egyéni tulajdonságot",
         "YES": "Törlés ",
@@ -92,12 +92,12 @@
       "CONTACT": "Kontakt"
     },
     "LIST": {
-      "TABLE_HEADER": [
-        "Név",
-        "Leírás",
-        "Típus",
-        "Kulcs"
-      ],
+      "TABLE_HEADER": {
+        "NAME": "Név",
+        "DESCRIPTION": "Leírás",
+        "TYPE": "Típus",
+        "KEY": "Kulcs"
+      },
       "BUTTONS": {
         "EDIT": "Szerkesztés",
         "DELETE": "Törlés"

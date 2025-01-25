@@ -65,7 +65,7 @@
         "ERROR_MESSAGE": "Couldn't delete the custom attribute. Try again."
       },
       "CONFIRM": {
-        "TITLE": "%{attributeName}팀을 삭제하시겠습니까?",
+        "TITLE": "{attributeName}팀을 삭제하시겠습니까?",
         "PLACE_HOLDER": "Please type {attributeName} to confirm",
         "MESSAGE": "Deleting will remove the custom attribute",
         "YES": "삭제 ",
@@ -92,12 +92,12 @@
       "CONTACT": "Contact"
     },
     "LIST": {
-      "TABLE_HEADER": [
-        "이름",
-        "내용",
-        "Type",
-        "Key"
-      ],
+      "TABLE_HEADER": {
+        "NAME": "이름",
+        "DESCRIPTION": "내용",
+        "TYPE": "Type",
+        "KEY": "Key"
+      },
       "BUTTONS": {
         "EDIT": "수정",
         "DELETE": "삭제"

@@ -32,17 +32,35 @@ export default {
       default: () => {},
     },
   },
+  emits: [
+    'businessHoursToggle',
+    'dateRangeChange',
+    'filterChange',
+    'groupByFilterChange',
+  ],
   data() {
     return {
       currentSelectedFilter: null,
-      currentDateRangeSelection: this.$t('REPORT.DATE_RANGE')[0],
-      dateRange: this.$t('REPORT.DATE_RANGE'),
+      currentDateRangeSelection: {
+        id: 0,
+        name: this.$t('REPORT.DATE_RANGE_OPTIONS.LAST_7_DAYS'),
+      },
       customDateRange: [new Date(), new Date()],
       currentSelectedGroupByFilter: null,
       businessHoursSelected: false,
     };
   },
   computed: {
+    dateRange() {
+      return [
+        { id: 0, name: this.$t('REPORT.DATE_RANGE_OPTIONS.LAST_7_DAYS') },
+        { id: 1, name: this.$t('REPORT.DATE_RANGE_OPTIONS.LAST_30_DAYS') },
+        { id: 2, name: this.$t('REPORT.DATE_RANGE_OPTIONS.LAST_3_MONTHS') },
+        { id: 3, name: this.$t('REPORT.DATE_RANGE_OPTIONS.LAST_6_MONTHS') },
+        { id: 4, name: this.$t('REPORT.DATE_RANGE_OPTIONS.LAST_YEAR') },
+        { id: 5, name: this.$t('REPORT.DATE_RANGE_OPTIONS.CUSTOM_DATE_RANGE') },
+      ];
+    },
     isDateRangeSelected() {
       return this.currentDateRangeSelection.id === CUSTOM_DATE_RANGE_ID;
     },
@@ -158,24 +176,22 @@ export default {
           :options="filterItemsList"
           :option-height="24"
           :show-labels="false"
-          @input="changeFilterSelection"
+          @update:model-value="changeFilterSelection"
         >
-          <template slot="singleLabel" slot-scope="props">
-            <div class="flex items-center gap-2">
+          <template #singleLabel="props">
+            <div class="flex min-w-0 items-center gap-2">
               <Thumbnail
                 :src="props.option.thumbnail"
                 :status="props.option.availability_status"
                 :username="props.option.name"
                 size="22px"
               />
-              <span class="reports-option__desc">
-                <span class="my-0 text-slate-800 dark:text-slate-75">{{
-                  props.option.name
-                }}</span>
-              </span>
+              <span class="my-0 text-slate-800 truncate dark:text-slate-75">{{
+                props.option.name
+              }}</span>
             </div>
           </template>
-          <template slot="option" slot-scope="props">
+          <template #options="props">
             <div class="flex items-center gap-2">
               <Thumbnail
                 :src="props.option.thumbnail"
@@ -205,31 +221,29 @@ export default {
           :options="filterItemsList"
           :option-height="24"
           :show-labels="false"
-          @input="changeFilterSelection"
+          @update:model-value="changeFilterSelection"
         >
-          <template slot="singleLabel" slot-scope="props">
-            <div class="flex items-center gap-2">
+          <template #singleLabel="props">
+            <div class="flex items-center min-w-0 gap-2">
               <div
                 :style="{ backgroundColor: props.option.color }"
                 class="w-5 h-5 rounded-full"
               />
-              <span class="reports-option__desc">
-                <span class="my-0 text-slate-800 dark:text-slate-75">
-                  {{ props.option.title }}
-                </span>
+
+              <span class="my-0 text-slate-800 truncate dark:text-slate-75">
+                {{ props.option.title }}
               </span>
             </div>
           </template>
-          <template slot="option" slot-scope="props">
-            <div class="flex items-center gap-2">
+          <template #option="props">
+            <div class="flex items-center min-w-0 gap-2">
               <div
                 :style="{ backgroundColor: props.option.color }"
                 class="flex-shrink-0 w-5 h-5 border border-solid rounded-full border-slate-100 dark:border-slate-800"
               />
-              <span class="reports-option__desc">
-                <span class="my-0 text-slate-800 dark:text-slate-75">
-                  {{ props.option.title }}
-                </span>
+
+              <span class="my-0 text-slate-800 truncate dark:text-slate-75">
+                {{ props.option.title }}
               </span>
             </div>
           </template>
@@ -259,7 +273,7 @@ export default {
           :options="filterItemsList"
           :searchable="false"
           :allow-empty="false"
-          @input="changeFilterSelection"
+          @update:model-value="changeFilterSelection"
         />
       </div>
       <div class="mx-1 md:w-[240px] w-full multiselect-wrap--small">
@@ -307,7 +321,7 @@ export default {
           :options="groupByFilterItemsList"
           :allow-empty="false"
           :show-labels="false"
-          @input="changeGroupByFilterSelection"
+          @update:model-value="changeGroupByFilterSelection"
         />
       </div>
     </div>

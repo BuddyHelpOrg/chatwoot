@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 
 import accounts from './modules/accounts';
 import agentBots from './modules/agentBots';
@@ -46,11 +45,13 @@ import userNotificationSettings from './modules/userNotificationSettings';
 import webhooks from './modules/webhooks';
 import draftMessages from './modules/draftMessages';
 import SLAReports from './modules/SLAReports';
-
+import captainAssistants from './captain/assistant';
+import captainDocuments from './captain/document';
+import captainResponses from './captain/response';
+import captainInboxes from './captain/inboxes';
 const plugins = [];
 
-Vue.use(Vuex);
-export default new Vuex.Store({
+export default createStore({
   modules: {
     accounts,
     agentBots,
@@ -97,6 +98,10 @@ export default new Vuex.Store({
     draftMessages,
     sla,
     slaReports: SLAReports,
+    captainAssistants,
+    captainDocuments,
+    captainResponses,
+    captainInboxes,
   },
   plugins,
 });

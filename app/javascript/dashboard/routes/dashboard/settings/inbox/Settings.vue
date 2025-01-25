@@ -175,7 +175,10 @@ export default {
     },
     canLocktoSingleConversation() {
       return (
-        this.isASmsInbox || this.isAWhatsAppChannel || this.isAFacebookInbox
+        this.isASmsInbox ||
+        this.isAWhatsAppChannel ||
+        this.isAFacebookInbox ||
+        this.isAPIInbox
       );
     },
     inboxNameLabel() {
@@ -372,8 +375,9 @@ export default {
         @change="onTabChange"
       >
         <woot-tabs-item
-          v-for="tab in tabs"
+          v-for="(tab, index) in tabs"
           :key="tab.key"
+          :index="index"
           :name="tab.name"
           :show-badge="false"
         />
@@ -394,11 +398,11 @@ export default {
           :src="avatarUrl"
           class="pb-4"
           delete-avatar
-          @change="handleImageUpload"
-          @onAvatarDelete="handleAvatarDelete"
+          @on-avatar-select="handleImageUpload"
+          @on-avatar-delete="handleAvatarDelete"
         />
         <woot-input
-          v-model.trim="selectedInboxName"
+          v-model="selectedInboxName"
           class="w-3/4 pb-4"
           :class="{ error: v$.selectedInboxName.$error }"
           :label="inboxNameLabel"
@@ -412,7 +416,7 @@ export default {
         />
         <woot-input
           v-if="isAPIInbox"
-          v-model.trim="webhookUrl"
+          v-model="webhookUrl"
           class="w-3/4 pb-4"
           :class="{ error: v$.webhookUrl.$error }"
           :label="
@@ -430,7 +434,7 @@ export default {
         />
         <woot-input
           v-if="isAWebWidgetInbox"
-          v-model.trim="channelWebsiteUrl"
+          v-model="channelWebsiteUrl"
           class="w-3/4 pb-4"
           :label="$t('INBOX_MGMT.ADD.WEBSITE_CHANNEL.CHANNEL_DOMAIN.LABEL')"
           :placeholder="
@@ -439,7 +443,7 @@ export default {
         />
         <woot-input
           v-if="isAWebWidgetInbox"
-          v-model.trim="channelWelcomeTitle"
+          v-model="channelWelcomeTitle"
           class="w-3/4 pb-4"
           :label="
             $t('INBOX_MGMT.ADD.WEBSITE_CHANNEL.CHANNEL_WELCOME_TITLE.LABEL')
@@ -453,7 +457,7 @@ export default {
 
         <woot-input
           v-if="isAWebWidgetInbox"
-          v-model.trim="channelWelcomeTagline"
+          v-model="channelWelcomeTagline"
           class="w-3/4 pb-4"
           :label="
             $t('INBOX_MGMT.ADD.WEBSITE_CHANNEL.CHANNEL_WELCOME_TAGLINE.LABEL')
@@ -505,7 +509,7 @@ export default {
         </label>
         <div v-if="greetingEnabled" class="pb-4">
           <GreetingsEditor
-            v-model.trim="greetingMessage"
+            v-model="greetingMessage"
             :label="
               $t(
                 'INBOX_MGMT.ADD.WEBSITE_CHANNEL.CHANNEL_GREETING_MESSAGE.LABEL'
@@ -689,7 +693,7 @@ export default {
             value="use_inbox_avatar_for_bot"
             @input="handleFeatureFlag"
           />
-          <label for="emoji_picker">
+          <label for="use_inbox_avatar_for_bot">
             {{ $t('INBOX_MGMT.FEATURES.USE_INBOX_AVATAR_FOR_BOT') }}
           </label>
         </div>
