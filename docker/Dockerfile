@@ -74,8 +74,8 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
   && rm -rf spec node_modules tmp/cache; \
   fi
 
-# Generate .git_sha file with current commit hash
-RUN git rev-parse HEAD > /app/.git_sha
+# Generate .git_sha file with current commit hash or use a fallback
+RUN git rev-parse HEAD > /app/.git_sha 2>/dev/null || echo "unknown" > /app/.git_sha
 
 # Remove unnecessary files
 RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
@@ -85,7 +85,6 @@ RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
 
 # final build stage
 FROM ruby:3.3.3-alpine3.19
-
 
 ARG BUNDLE_WITHOUT="development:test"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
@@ -112,15 +111,13 @@ RUN apk update && apk add --no-cache \
   imagemagick \
   git \
   vips \
+  nodejs=20.15.1-r0 \
   && gem install bundler
 
-RUN if [ "$RAILS_ENV" != "production" ]; then \
-  apk add --no-cache nodejs=20.15.1-r0; \
-  # Install pnpm and configure environment
-  wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
+# Install pnpm and configure environment for all environments
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
   && source /root/.shrc \
-  && pnpm --version; \
-  fi
+  && pnpm --version
 
 COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
