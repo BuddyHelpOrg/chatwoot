@@ -86,7 +86,6 @@ RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
 # final build stage
 FROM ruby:3.3.3-alpine3.19
 
-
 ARG BUNDLE_WITHOUT="development:test"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV BUNDLER_VERSION=2.5.11
@@ -112,15 +111,13 @@ RUN apk update && apk add --no-cache \
   imagemagick \
   git \
   vips \
+  nodejs=20.15.1-r0 \
   && gem install bundler
 
-RUN if [ "$RAILS_ENV" != "production" ]; then \
-  apk add --no-cache nodejs=20.15.1-r0; \
-  # Install pnpm and configure environment
-  wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
+# Install pnpm and configure environment for all environments
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
   && source /root/.shrc \
-  && pnpm --version; \
-  fi
+  && pnpm --version
 
 COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
