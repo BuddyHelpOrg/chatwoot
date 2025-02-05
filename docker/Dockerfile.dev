@@ -1,0 +1,158 @@
+# ----------------------------------------------------------------------------
+# Pre-build stage: compile gems, assets, etc.
+# ----------------------------------------------------------------------------
+  FROM ruby:3.3.3-alpine3.19 AS pre-builder
+
+  # Default arguments for production
+  ARG BUNDLE_WITHOUT="development:test"
+  ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+
+  ENV BUNDLER_VERSION=2.5.11
+
+  ARG RAILS_SERVE_STATIC_FILES=true
+  ENV RAILS_SERVE_STATIC_FILES=${RAILS_SERVE_STATIC_FILES}
+
+  ARG RAILS_ENV=production
+  ENV RAILS_ENV=${RAILS_ENV}
+
+  ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
+  ENV NODE_OPTIONS=${NODE_OPTIONS}
+
+  ENV BUNDLE_PATH="/gems"
+
+  # Install Alpine packages for Ruby, Node, PostgreSQL, building gems, etc.
+  RUN apk update && apk add --no-cache \
+    openssl \
+    tar \
+    build-base \
+    tzdata \
+    postgresql-dev \
+    postgresql-client \
+    nodejs=20.15.1-r0 \
+    git \
+    bash \
+    && mkdir -p /var/app \
+    && gem install bundler
+
+  # Install pnpm globally, set environment paths
+  RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
+      && echo 'export PNPM_HOME="/root/.local/share/pnpm"' >> /root/.shrc \
+      && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.shrc \
+      && export PNPM_HOME="/root/.local/share/pnpm" \
+      && export PATH="$PNPM_HOME:$PATH" \
+      && pnpm --version
+
+  ENV PNPM_HOME="/root/.local/share/pnpm"
+  ENV PATH="$PNPM_HOME:$PATH"
+
+  WORKDIR /app
+
+  # Copy only Gemfile first so bundle install can be cached unless Gemfile changes
+  COPY Gemfile Gemfile.lock ./
+
+  # Additional Alpine packages needed to compile certain gems (grpc, nokogiri, vips, etc.)
+  RUN apk update && apk add --no-cache \
+    build-base \
+    musl \
+    ruby-full \
+    ruby-dev \
+    gcc \
+    make \
+    musl-dev \
+    openssl \
+    openssl-dev \
+    g++ \
+    linux-headers \
+    xz \
+    vips
+
+  # Force a Ruby platform approach (simplifies gem compilation on Alpine)
+  RUN bundle config set --local force_ruby_platform true
+
+  # Install only production gems, if RAILS_ENV=production
+  RUN if [ "$RAILS_ENV" = "production" ]; then \
+        bundle config set without 'development test'; \
+      fi && \
+      bundle install -j4 -r3
+
+  # Now copy package.json and pnpm-lock.yaml, then install
+  COPY package.json pnpm-lock.yaml ./
+  RUN pnpm i
+
+  # Copy the rest of the application code after bundler steps are cached
+  COPY . /app
+
+  # Create log directory so it won't fail if logging to disk
+  RUN mkdir -p /app/log
+
+  # If production, precompile assets (and remove dev/test files)
+  RUN if [ "$RAILS_ENV" = "production" ]; then \
+        SECRET_KEY_BASE=precompile_placeholder \
+        RAILS_LOG_TO_STDOUT=enabled \
+        bundle exec rake assets:precompile && \
+        rm -rf spec node_modules tmp/cache; \
+      fi
+
+  # Generate a .git_sha file with current commit hash or fallback
+  RUN git rev-parse HEAD > /app/.git_sha 2>/dev/null || echo "unknown" > /app/.git_sha
+
+  # Remove unneeded gem cache files, leftover .c/.o, and git references
+  RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
+    && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
+    && rm -rf .git \
+    && rm .gitignore
+
+  # ----------------------------------------------------------------------------
+  # Final build stage: minimal runtime image
+  # ----------------------------------------------------------------------------
+  FROM ruby:3.3.3-alpine3.19
+
+  ARG BUNDLE_WITHOUT="development:test"
+  ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+  ENV BUNDLER_VERSION=2.5.11
+
+  ARG EXECJS_RUNTIME="Disabled"
+  ENV EXECJS_RUNTIME=${EXECJS_RUNTIME}
+
+  ARG RAILS_SERVE_STATIC_FILES=true
+  ENV RAILS_SERVE_STATIC_FILES=${RAILS_SERVE_STATIC_FILES}
+
+  ARG BUNDLE_FORCE_RUBY_PLATFORM=1
+  ENV BUNDLE_FORCE_RUBY_PLATFORM=${BUNDLE_FORCE_RUBY_PLATFORM}
+
+  ARG RAILS_ENV=production
+  ENV RAILS_ENV=${RAILS_ENV}
+  ENV BUNDLE_PATH="/gems"
+
+  # Install needed Alpine packages for running the Rails app
+  RUN apk update && apk add --no-cache \
+    build-base \
+    openssl \
+    tzdata \
+    postgresql-client \
+    imagemagick \
+    git \
+    vips \
+    nodejs=20.15.1-r0 \
+    bash \
+    && gem install bundler
+
+  # Re-install pnpm in the final image
+  RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
+      && source /root/.shrc \
+      && pnpm --version
+
+  # Download and configure cwctl with bash
+  RUN wget https://get.chatwoot.app/linux/install.sh -O /usr/local/bin/cwctl \
+      && chmod +x /usr/local/bin/cwctl \
+      && sed -i '1s|#!/bin/sh|#!/bin/bash|' /usr/local/bin/cwctl
+
+  # Copy final /gems and /app from builder
+  COPY --from=pre-builder /gems/ /gems/
+  COPY --from=pre-builder /app /app
+
+  # Also copy .git_sha from the builder stage
+  COPY --from=pre-builder /app/.git_sha /app/.git_sha
+
+  WORKDIR /app
+  EXPOSE 3000
