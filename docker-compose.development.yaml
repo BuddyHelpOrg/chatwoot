@@ -10,7 +10,6 @@ services:
     stdin_open: true
     env_file: .docker.env
 
-
   rails:
     <<: *base
     ports:
