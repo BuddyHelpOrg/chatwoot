@@ -114,6 +114,8 @@ gem 'scout_apm', require: false
 gem 'sentry-rails', '>= 5.19.0', require: false
 gem 'sentry-ruby', require: false
 gem 'sentry-sidekiq', '>= 5.19.0', require: false
+gem 'yabeda-rails'
+gem 'yabeda-prometheus'
 
 ##-- background job processing --##
 gem 'sidekiq', '>= 7.3.1'

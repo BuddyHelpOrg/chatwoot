@@ -124,6 +124,8 @@ GEM
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
+    anyway_config (2.6.4)
+      ruby-next-core (~> 1.0)
     ast (2.4.2)
     attr_extras (7.1.0)
     audited (5.4.1)
@@ -221,6 +223,7 @@ GEM
     down (5.4.0)
       addressable (~> 2.8)
     dry-cli (1.1.0)
+    dry-initializer (3.2.0)
     ecma-re-validator (0.4.0)
       regexp_parser (~> 2.2)
     elastic-apm (4.6.2)
@@ -553,6 +556,8 @@ GEM
     pgvector (0.1.1)
     procore-sift (1.0.0)
       activerecord (>= 6.1)
+    prometheus-client (4.2.4)
+      base64
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -685,6 +690,7 @@ GEM
     rubocop-rspec (2.21.0)
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
+    ruby-next-core (1.1.1)
     ruby-openai (7.3.1)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
@@ -836,6 +842,19 @@ GEM
     working_hours (1.4.1)
       activesupport (>= 3.2)
       tzinfo
+    yabeda (0.13.1)
+      anyway_config (>= 1.0, < 3)
+      concurrent-ruby
+      dry-initializer
+    yabeda-prometheus (0.9.1)
+      prometheus-client (>= 3.0, < 5.0)
+      rack
+      yabeda (~> 0.10)
+    yabeda-rails (0.9.0)
+      activesupport
+      anyway_config (>= 1.3, < 3)
+      railties
+      yabeda (~> 0.8)
     zeitwerk (2.6.17)
 
 PLATFORMS
@@ -977,6 +996,8 @@ DEPENDENCIES
   webmock
   wisper (= 2.0.0)
   working_hours
+  yabeda-prometheus
+  yabeda-rails
 
 RUBY VERSION
    ruby 3.3.3p89
