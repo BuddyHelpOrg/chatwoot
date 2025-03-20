@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96px" height="83px" viewBox="0 0 96 83" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>hearty_dark</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="hearty-character" transform="translate(48.000000, 41.500000) scale(-1, 1) translate(-48.000000, -41.500000)">
+            <!-- Face outline -->
+            <path d="M27.955556,70.761912 C28.3884795,71.042465 28.5772836,71.576706 28.4157498,72.064079 L26.7264785,77.090482 C25.6526928,79.999218 28.1619804,83.086463 31.2072139,82.998149 C51.379992,80.664395 75.594143,70.376711 89.09127,51.391001 C95.994178,41.167204 97.736475,30.071538 94.263243,18.415921 C91.310805,7.951608 81.627796,0.465556 70.808506,0.027742 C60.822488,-0.430741 52.391282,4.821145 48.800634,13.737138 C48.060157,15.242241 47.887821,15.240362 47.139769,13.73338 C43.645705,4.89067 35.0895078,-0.327394 25.5958788,0.018347 C14.7065177,0.414822 4.9704821,7.94785 1.6866295,18.391493 C-1.4968515,28.513823 -0.1958096,38.692523 5.7772417,48.711506 C11.8771777,58.944698 21.2060459,66.351831 27.955556,70.761912 Z" fill="#5140BE" fill-rule="nonzero"/>
+            
+            <!-- Eyes -->
+            <g id="eyes">
+                <!-- Left eye -->
+                <ellipse id="left-eye" cx="35" cy="35" rx="8" ry="8" fill="#FFFFFF">
+                    <!-- Blinking animation -->
+                    <animate attributeName="ry" values="8;8;1;8;8" dur="4.7s" keyTimes="0;0.96;0.97;0.98;1" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="35;35;37;35;35" dur="4.7s" keyTimes="0;0.96;0.97;0.98;1" repeatCount="indefinite"/>
+                    
+                    <!-- Natural scanning movement -->
+                    <animate id="left-look-x" attributeName="cx" 
+                        values="35;35;35.5;35.3;35;35;34.5;35;35;35.8;35.5;35;34.3;34.6;35" 
+                        dur="15s" 
+                        keyTimes="0;0.2;0.23;0.26;0.3;0.5;0.52;0.54;0.6;0.63;0.66;0.7;0.73;0.76;1"
+                        calcMode="spline"
+                        keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1"
+                        repeatCount="indefinite"/>
+                        
+                    <animate id="left-look-y" attributeName="cy" 
+                        values="35;35;34.9;35;35;35;35;35;35;34.8;34.9;35;35.1;35;35" 
+                        dur="15s" 
+                        keyTimes="0;0.2;0.23;0.26;0.3;0.5;0.52;0.54;0.6;0.63;0.66;0.7;0.73;0.76;1"
+                        calcMode="spline"
+                        keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1"
+                        repeatCount="indefinite"/>
+                </ellipse>
+                
+                <!-- Right eye -->
+                <ellipse id="right-eye" cx="61" cy="35" rx="8" ry="8" fill="#FFFFFF">
+                    <!-- Blinking animation -->
+                    <animate attributeName="ry" values="8;8;1;8;8" dur="4.7s" keyTimes="0;0.96;0.97;0.98;1" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="35;35;37;35;35" dur="4.7s" keyTimes="0;0.96;0.97;0.98;1" repeatCount="indefinite"/>
+                    
+                    <!-- Natural scanning movement -->
+                    <animate id="right-look-x" attributeName="cx" 
+                        values="61;61;61.5;61.3;61;61;60.5;61;61;61.8;61.5;61;60.3;60.6;61" 
+                        dur="15s" 
+                        keyTimes="0;0.2;0.23;0.26;0.3;0.5;0.52;0.54;0.6;0.63;0.66;0.7;0.73;0.76;1"
+                        calcMode="spline"
+                        keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1"
+                        repeatCount="indefinite"/>
+                        
+                    <animate id="right-look-y" attributeName="cy" 
+                        values="35;35;34.9;35;35;35;35;35;35;34.8;34.9;35;35.1;35;35" 
+                        dur="15s" 
+                        keyTimes="0;0.2;0.23;0.26;0.3;0.5;0.52;0.54;0.6;0.63;0.66;0.7;0.73;0.76;1"
+                        calcMode="spline"
+                        keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1"
+                        repeatCount="indefinite"/>
+                </ellipse>
+            </g>
+        </g>
+    </g>
+</svg> 
