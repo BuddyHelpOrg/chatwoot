@@ -9,6 +9,9 @@ services:
     tty: true
     stdin_open: true
     env_file: .docker.env
+    networks:
+      - default
+      - chatwoot_network
 
 
   rails:
@@ -33,3 +36,7 @@ services:
       - EXECJS_RUNTIME=Node
     command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
     restart: always
+
+networks:
+  chatwoot_network:
+    external: true
