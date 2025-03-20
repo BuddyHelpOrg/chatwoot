@@ -21,8 +21,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    networks:
-      - chatwoot_network
+
 
   redis:
     image: 'redis:alpine'
@@ -43,14 +42,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    networks:
-      - chatwoot_network
+
 
 volumes:
   postgres-data:
   redis-data:
 
-networks:
-  chatwoot_network:
-    name: chatwoot_network
-    external: true
+
