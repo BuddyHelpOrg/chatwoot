@@ -22,6 +22,16 @@ services:
       - EXECJS_RUNTIME=Node
     entrypoint: docker/entrypoints/rails.sh
     command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - '--spider'
+        - '-q'
+        - 'http://127.0.0.1:3000'
+      interval: 5s
+      timeout: 20s
+      retries: 10
     restart: always
 
   sidekiq:
@@ -32,4 +42,12 @@ services:
       - INSTALLATION_ENV=docker
       - EXECJS_RUNTIME=Node
     command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "bundle exec rails runner 'puts Sidekiq.redis(&:info)' > /dev/null 2>&1"
+      interval: 30s
+      timeout: 10s
+      retries: 3
     restart: always
+
