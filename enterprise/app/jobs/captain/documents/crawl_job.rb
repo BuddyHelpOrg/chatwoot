@@ -2,7 +2,7 @@ class Captain::Documents::CrawlJob < ApplicationJob
   queue_as :low
 
   def perform(document)
-    if InstallationConfig.find_by(name: 'CAPTAIN_FIRECRAWL_API_KEY').present?
+    if InstallationConfig.find_by(name: 'CAPTAIN_FIRECRAWL_API_KEY')&.value.present?
       perform_firecrawl_crawl(document)
     else
       perform_simple_crawl(document)
@@ -32,7 +32,7 @@ class Captain::Documents::CrawlJob < ApplicationJob
   def perform_firecrawl_crawl(document)
     captain_usage_limits = document.account.usage_limits[:captain] || {}
     document_limit = captain_usage_limits[:documents] || {}
-    crawl_limit = [document_limit[:available] || 10, 500].min
+    crawl_limit = [document_limit[:current_available] || 10, 500].min
 
     Captain::Tools::FirecrawlService
       .new
