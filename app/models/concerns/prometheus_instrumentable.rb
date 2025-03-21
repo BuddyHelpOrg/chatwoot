@@ -3,7 +3,7 @@ module PrometheusInstrumentable
 
   included do
     after_create :increment_create_counter
-    after_update :track_status_change, if: -> { defined?(self.status_changed?) && self.status_changed? }
+    after_update :track_status_change, if: -> { defined?(status_changed?) && status_changed? }
   end
 
   private
@@ -15,7 +15,7 @@ module PrometheusInstrumentable
     when 'Conversation'
       CHATWOOT_CONVERSATIONS_CREATED.increment if defined?(CHATWOOT_CONVERSATIONS_CREATED)
     when 'Message'
-      CHATWOOT_MESSAGES_CREATED.increment(labels: { message_type: self.message_type }) if defined?(CHATWOOT_MESSAGES_CREATED)
+      CHATWOOT_MESSAGES_CREATED.increment(labels: { message_type: message_type }) if defined?(CHATWOOT_MESSAGES_CREATED)
     when 'User'
       recalculate_active_users if defined?(CHATWOOT_USERS_ACTIVE)
     end
@@ -26,9 +26,7 @@ module PrometheusInstrumentable
 
     case self.class.name
     when 'Conversation'
-      if self.status == 'resolved'
-        CHATWOOT_CONVERSATIONS_RESOLVED.increment if defined?(CHATWOOT_CONVERSATIONS_RESOLVED)
-      end
+      CHATWOOT_CONVERSATIONS_RESOLVED.increment if status == 'resolved' && defined?(CHATWOOT_CONVERSATIONS_RESOLVED)
     end
   end
 

@@ -15,7 +15,7 @@ if Rails.env.production? || Rails.env.development?
 
     # Add default metrics (process metrics like memory, CPU, etc.)
     # require 'prometheus/client/rack/collector' # Comment out since this isn't available
-    
+
     # Create custom metrics
     CHATWOOT_REQUEST_DURATION = prometheus_registry.histogram(
       :chatwoot_request_duration_seconds,
@@ -23,7 +23,7 @@ if Rails.env.production? || Rails.env.development?
       labels: [:path, :method, :status],
       buckets: [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
     )
-    
+
     CHATWOOT_CONTROLLER_DURATION = prometheus_registry.histogram(
       :chatwoot_controller_duration_seconds,
       docstring: 'Duration of Chatwoot controller actions in seconds',
@@ -43,46 +43,48 @@ if Rails.env.production? || Rails.env.development?
       labels: [:query_type],
       buckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5]
     )
-    
+
     # Business metrics
     CHATWOOT_CONVERSATIONS_CREATED = prometheus_registry.counter(
       :chatwoot_conversations_created_total,
       docstring: 'Number of conversations created'
     )
-    
+
     CHATWOOT_CONVERSATIONS_RESOLVED = prometheus_registry.counter(
       :chatwoot_conversations_resolved_total,
       docstring: 'Number of conversations resolved'
     )
-    
+
     CHATWOOT_MESSAGES_CREATED = prometheus_registry.counter(
       :chatwoot_messages_created_total,
       docstring: 'Number of messages created',
       labels: [:message_type]
     )
-    
+
     CHATWOOT_USERS_ACTIVE = prometheus_registry.gauge(
       :chatwoot_users_active,
       docstring: 'Number of active users'
     )
-    
+
     # Set initial values for gauges based on database - defer this to after model loading
     # Will be initialized when the app starts
     begin
       Rails.application.config.after_initialize do
         if defined?(User) && defined?(Account)
-          CHATWOOT_USERS_ACTIVE.set(User.where(account_id: Account.all.pluck(:id)).distinct.count) rescue 0
+          begin
+            CHATWOOT_USERS_ACTIVE.set(User.where(account_id: Account.all.pluck(:id)).distinct.count)
+          rescue StandardError
+            0
+          end
         end
       end
-    rescue => e
+    rescue StandardError => e
       Rails.logger.error("Error initializing Prometheus user metrics: #{e.message}")
     end
-    
+
     # Initialize the middleware
-    if defined?(PrometheusExporter) && defined?(PrometheusExporter::Middleware)
-      Rails.application.config.middleware.use PrometheusExporter::Middleware
-    end
-    
+    Rails.application.config.middleware.use PrometheusExporter::Middleware if defined?(PrometheusExporter) && defined?(PrometheusExporter::Middleware)
+
     # Instrument Rails
     ActiveSupport::Notifications.subscribe('sql.active_record') do |_name, start, finish, _id, payload|
       if payload[:name] != 'SCHEMA'
@@ -90,7 +92,7 @@ if Rails.env.production? || Rails.env.development?
         CHATWOOT_DB_QUERY_DURATION.observe(duration, labels: { query_type: payload[:name] })
       end
     end
-    
+
     # Instrument Controller Actions
     ActiveSupport::Notifications.subscribe('process_action.action_controller') do |_name, start, finish, _id, payload|
       labels = {
@@ -102,7 +104,7 @@ if Rails.env.production? || Rails.env.development?
       CHATWOOT_REQUEST_DURATION.observe(duration, labels: labels)
       CHATWOOT_REQUEST_COUNT.increment(labels: labels)
     end
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error("Error initializing Prometheus: #{e.message}")
     # Continue booting the app even if Prometheus isn't available
   end

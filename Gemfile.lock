@@ -555,6 +555,10 @@ GEM
     pgvector (0.1.1)
     procore-sift (1.0.0)
       activerecord (>= 6.1)
+    prometheus-client (4.2.4)
+      base64
+    prometheus_exporter (2.2.0)
+      webrick
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -755,6 +759,9 @@ GEM
       fugit (~> 1.8)
       globalid (>= 1.0.1)
       sidekiq (>= 6)
+    sidekiq-prometheus-exporter (0.2.1)
+      rack (>= 1.6.0)
+      sidekiq (>= 4.1.0)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -845,6 +852,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    webrick (1.9.1)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -944,6 +952,8 @@ DEPENDENCIES
   pg_search
   pgvector
   procore-sift
+  prometheus-client
+  prometheus_exporter
   pry-rails
   puma
   pundit
@@ -974,6 +984,7 @@ DEPENDENCIES
   shoulda-matchers
   sidekiq (>= 7.3.1)
   sidekiq-cron (>= 1.12.0)
+  sidekiq-prometheus-exporter
   simplecov (= 0.17.1)
   slack-ruby-client (~> 2.5.2)
   spring
