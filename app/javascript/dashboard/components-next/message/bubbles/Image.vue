@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAlert } from 'dashboard/composables';
 import BaseBubble from './Base.vue';
 import Button from 'next/button/Button.vue';
 import Icon from 'next/icon/Icon.vue';
@@ -10,6 +12,8 @@ import { downloadFile } from '@chatwoot/utils';
 import GalleryView from 'dashboard/components/widgets/conversation/components/GalleryView.vue';
 
 const emit = defineEmits(['error']);
+const { t } = useI18n();
+
 const { filteredCurrentChatAttachments, attachments } = useMessageContext();
 
 const attachment = computed(() => {
@@ -31,7 +35,7 @@ const downloadAttachment = async () => {
     isDownloading.value = true;
     await downloadFile({ url: dataUrl, type: fileType, extension });
   } catch (error) {
-    // error
+    useAlert(t('GALLERY_VIEW.ERROR_DOWNLOADING'));
   } finally {
     isDownloading.value = false;
   }
@@ -52,6 +56,7 @@ const downloadAttachment = async () => {
     </div>
     <div v-else class="relative group rounded-lg overflow-hidden">
       <img
+        class="skip-context-menu"
         :src="attachment.dataUrl"
         :width="attachment.width"
         :height="attachment.height"
@@ -59,8 +64,9 @@ const downloadAttachment = async () => {
         @error="handleError"
       />
       <div
-        class="inset-0 p-2 absolute bg-gradient-to-tl from-n-slate-12/30 dark:from-n-slate-1/50 via-transparent to-transparent hidden group-hover:flex items-end justify-end gap-1.5"
-      >
+        class="inset-0 p-2 pointer-events-none absolute bg-gradient-to-tl from-n-slate-12/30 dark:from-n-slate-1/50 via-transparent to-transparent hidden group-hover:flex"
+      />
+      <div class="absolute right-2 bottom-2 hidden group-hover:flex gap-2">
         <Button xs solid slate icon="i-lucide-expand" class="opacity-60" />
         <Button
           xs
