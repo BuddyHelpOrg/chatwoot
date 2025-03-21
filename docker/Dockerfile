@@ -36,6 +36,8 @@ RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which 
     && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.shrc \
     && export PNPM_HOME="/root/.local/share/pnpm" \
     && export PATH="$PNPM_HOME:$PATH" \
+    && source /root/.shrc \
+    && pnpm add -g pnpm@9.15.1 \
     && pnpm --version
 
 # Persist the environment variables in Docker
@@ -117,6 +119,7 @@ RUN apk update && apk add --no-cache \
 # Install pnpm and configure environment for all environments
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
   && source /root/.shrc \
+  && pnpm add -g pnpm@9.15.1 \
   && pnpm --version
 
 COPY --from=pre-builder /gems/ /gems/
