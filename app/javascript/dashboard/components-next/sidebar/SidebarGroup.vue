@@ -15,6 +15,7 @@ const props = defineProps({
   to: { type: Object, default: null },
   activeOn: { type: Array, default: () => [] },
   children: { type: Array, default: undefined },
+  getterKeys: { type: Object, default: () => ({}) },
 });
 
 const {
@@ -23,7 +24,6 @@ const {
   resolvePath,
   resolvePermissions,
   resolveFeatureFlag,
-  isOnChatwootCloud,
   isAllowed,
 } = useSidebarContext();
 
@@ -42,7 +42,6 @@ const hasChildren = computed(
 const accessibleItems = computed(() => {
   if (!hasChildren.value) return [];
   return props.children.filter(child => {
-    if (child.showOnlyOnCloud && !isOnChatwootCloud.value) return false;
     // If a item has no link, it means it's just a subgroup header
     // So we don't need to check for permissions here, because there's nothing to
     // access here anyway
@@ -143,6 +142,7 @@ onMounted(async () => {
       :name
       :label
       :to
+      :getter-keys="getterKeys"
       :is-active="isActive"
       :has-active-child="hasActiveChild"
       :expandable="hasChildren"
@@ -164,7 +164,7 @@ onMounted(async () => {
           :active-child="activeChild"
         />
         <SidebarGroupLeaf
-          v-else
+          v-else-if="isAllowed(child.to)"
           v-show="isExpanded || activeChild?.name === child.name"
           v-bind="child"
           :active="activeChild?.name === child.name"
