@@ -44,7 +44,8 @@ class AccountUser < ApplicationRecord
     setting = user.notification_settings.new(account_id: account.id)
     setting.selected_email_flags = [
       :email_conversation_assignment,
-      :email_conversation_mention]
+      :email_conversation_mention
+    ]
     setting.selected_push_flags = [
       # :push_conversation_creation, # Turned off
       :push_conversation_assignment,

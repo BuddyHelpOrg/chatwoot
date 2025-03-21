@@ -7,7 +7,7 @@ module MonitoringConcern
     private
 
     def monitor_controller_action
-      start_time = Time.now
+      start_time = Time.zone.now
 
       yield
 
@@ -15,7 +15,7 @@ module MonitoringConcern
       return if request.path.starts_with?('/assets') || request.path.starts_with?('/packs')
 
       begin
-        duration = Time.now - start_time
+        duration = Time.zone.now - start_time
         labels = {
           controller: self.class.name,
           action: action_name,

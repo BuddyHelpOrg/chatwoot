@@ -1,8 +1,18 @@
 require 'prometheus/client'
 require 'prometheus_exporter/middleware' if defined?(PrometheusExporter)
+require 'prometheus_exporter/server' if defined?(PrometheusExporter)
 
 if Rails.env.production? || Rails.env.development?
   begin
+    # Configure Prometheus Exporter server for Rails
+    if defined?(PrometheusExporter::Server) && ENV['PROMETHEUS_EXPORTER_PORT'].present?
+      # Configure server host and port
+      PrometheusExporter::Client.default = PrometheusExporter::Client.new(
+        host: ENV.fetch('PROMETHEUS_EXPORTER_HOST', 'localhost'),
+        port: ENV.fetch('PROMETHEUS_EXPORTER_PORT', '9394').to_i
+      )
+    end
+
     # Create and get a default Prometheus registry
     prometheus_registry = Prometheus::Client.registry
 
@@ -72,7 +82,7 @@ if Rails.env.production? || Rails.env.development?
       Rails.application.config.after_initialize do
         if defined?(User) && defined?(Account)
           begin
-            CHATWOOT_USERS_ACTIVE.set(User.where(account_id: Account.all.pluck(:id)).distinct.count)
+            CHATWOOT_USERS_ACTIVE.set(User.where(account_id: Account.all.select(:id)).distinct.count)
           rescue StandardError
             0
           end
