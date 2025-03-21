@@ -10,6 +10,7 @@
     "test:coverage": "TZ=UTC vitest --no-watch --no-cache --coverage",
     "start:dev": "foreman start -f ./Procfile.dev",
     "start:test": "RAILS_ENV=test foreman start -f ./Procfile.test",
+    "start:monitor": "docker-compose -f docker-compose.infra.yaml up -d && docker-compose -f docker-compose.development.yaml up -d",
     "dev": "overmind start -f ./Procfile.dev",
     "ruby:prettier": "bundle exec rubocop -a",
     "build:sdk": "BUILD_MODE=library vite build",
@@ -18,7 +19,12 @@
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview",
-    "sync:i18n": "bin/sync_i18n_file_change"
+    "sync:i18n": "bin/sync_i18n_file_change",
+    "monitoring:stack": "cd monitoring && ./start_monitoring.sh",
+    "monitoring:stop": "cd monitoring && docker-compose -f docker-compose-modified.yml down",
+    "monitoring:infra": "docker-compose -f docker-compose.infra.yaml up -d",
+    "monitoring:app": "docker-compose -f docker-compose.development.yaml up -d",
+    "monitoring": "pnpm run monitoring:infra && pnpm run monitoring:app && pnpm run monitoring:stack"
   },
   "size-limit": [
     {

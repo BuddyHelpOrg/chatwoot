@@ -49,6 +49,7 @@ class User < ApplicationRecord
   include Reportable
   include SsoAuthenticatable
   include UserAttributeHelpers
+  include PrometheusInstrumentable
 
   devise :database_authenticatable,
          :registerable,
