@@ -8,8 +8,8 @@ defaults: &defaults
     image: ubuntu-2204:2024.05.1
   resource_class: large
   environment:
-    RAILS_LOG_TO_STDOUT: false
-    COVERAGE: true
+    RAILS_LOG_TO_STDOUT: "false"
+    COVERAGE: "true"
     LOG_LEVEL: warn
   parallelism: 4
 
