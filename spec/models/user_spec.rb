@@ -27,6 +27,13 @@ RSpec.describe User do
     it_behaves_like 'avatarable'
   end
 
+  describe 'default UI settings' do
+    it 'sets default audio alerts for assigned conversations' do
+      new_user = create(:user)
+      expect(new_user.ui_settings['enable_audio_alerts']).to eq('assigned')
+    end
+  end
+
   describe 'pubsub_token' do
     before { user.update(name: Faker::Name.name) }
 

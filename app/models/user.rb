@@ -105,6 +105,7 @@ class User < ApplicationRecord
   # rubocop:enable Rails/HasManyOrHasOneDependent
 
   before_validation :set_password_and_uid, on: :create
+  after_create :set_default_ui_settings
   after_destroy :remove_macros
 
   scope :order_by_full_name, -> { order('lower(name) ASC') }
@@ -161,6 +162,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def set_default_ui_settings
+    update(ui_settings: { enable_audio_alerts: 'assigned' })
+  end
 
   def remove_macros
     macros.personal.destroy_all
